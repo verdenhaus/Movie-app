@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_color"
-    tools:context=".MainActivity">
+    tools:context=".IntroActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -85,7 +84,7 @@ check out our recommendations for you"
                 <androidx.appcompat.widget.AppCompatButton
                     style="@android:style/Widget.Button"
                     android:layout_marginTop="8dp"
-                    android:id="@+id/button"
+                    android:id="@+id/getInBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Get Started"
