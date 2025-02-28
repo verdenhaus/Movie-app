@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText userEdt, passEdt;
     private Button loginBtn;
+    private TextView registBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         userEdt = findViewById(R.id.editTextText);
         passEdt = findViewById(R.id.editTextPasswors);
         loginBtn = findViewById(R.id.loginBtn);
+        registBtn = findViewById(R.id.registBtn);
 
         loginBtn.setOnClickListener(v -> {
             if(userEdt.getText().toString().isEmpty() ||
@@ -44,6 +47,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Incorrect username and password", Toast.LENGTH_SHORT).show();
 
             }
+        });
+
+        registBtn.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
         });
     }
 }
