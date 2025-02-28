@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.androidx.viewpager2)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     testImplementation(libs.junit)
