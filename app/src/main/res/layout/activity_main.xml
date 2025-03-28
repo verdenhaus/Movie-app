@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".Activites.MainActivity"
     android:background="@color/main_color">
 
     <ScrollView
@@ -38,10 +38,9 @@
                 android:layout_height="200dp">
 
                 <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpageSlider"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingStart="60dp"
-                    android:paddingEnd="60dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
