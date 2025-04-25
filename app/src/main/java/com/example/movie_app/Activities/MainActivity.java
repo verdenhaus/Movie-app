@@ -1,16 +1,20 @@
-package com.example.movie_app.Activites;
+package com.example.movie_app.Activities;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import com.example.movie_app.Adapters.SliderAdapters;
 import com.example.movie_app.Domian.SliderItems;
 import com.example.movie_app.R;
@@ -19,6 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView.Adapter adapterBestMovies, AdapteUpComing, adapterCategory;
+    private RecyclerView recyclerViewBestMovies, recyclerViewUpcomming, recyclerViewCategory;
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest, StringRequest2, StringRequest3;
+    private ProgressBar loading1, loading2, loading3;
+
 private ViewPager2 viewPager2;
 private Handler slideHandler = new Handler();
     @Override
@@ -27,11 +37,11 @@ private Handler slideHandler = new Handler();
         setContentView(R.layout.activity_main);
 
         initView();
-        banner();
+        banners();
     }
 
 
-    private void banner() {
+    private void banners() {
         List<SliderItems> sliderItems = new ArrayList<>();
         sliderItems.add(new SliderItems(R.drawable.wide1));
         sliderItems.add(new SliderItems(R.drawable.wide));
@@ -87,6 +97,17 @@ private Handler slideHandler = new Handler();
 
     private void initView(){
         viewPager2 = findViewById(R.id.viewpageSlider);
+        recyclerViewBestMovies = findViewById(R.id.view1);
+        recyclerViewBestMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewUpcomming = findViewById(R.id.view2);
+        recyclerViewUpcomming.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewCategory = findViewById(R.id.view3);
+        recyclerViewCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        loading1 = findViewById(R.id.progressBar1);
+        loading2 = findViewById(R.id.progressBar2);
+        loading3 = findViewById(R.id.progressBar3);
+
     }
 
 }
