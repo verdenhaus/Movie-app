@@ -25,6 +25,9 @@
         <activity
             android:name=".Activities.RegistrationActivity"
             android:exported="false" />
+        <activity
+            android:name=".Activities.ProfileActivity"
+            android:exported="false" />
 
         <activity
             android:name=".Activities.IntroActivity"

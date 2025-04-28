@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">Movie_App</string>username
+    <string name="app_name">Movie_App</string>
     <string name="username">username</string>
+    <string name="explorer">Explorer</string>
+    <string name="favourite">Favotite</string>
+    <string name="profile">Profile</string>
 </resources>
