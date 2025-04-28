@@ -1,8 +1,12 @@
 package com.example.movie_app.Activities;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -18,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.movie_app.Adapters.SliderAdapters;
 import com.example.movie_app.Domian.SliderItems;
 import com.example.movie_app.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest, StringRequest2, StringRequest3;
     private ProgressBar loading1, loading2, loading3;
+    private BottomNavigationView bottomNavigationView;
 
 private ViewPager2 viewPager2;
 private Handler slideHandler = new Handler();
@@ -107,6 +113,21 @@ private Handler slideHandler = new Handler();
         loading1 = findViewById(R.id.progressBar1);
         loading2 = findViewById(R.id.progressBar2);
         loading3 = findViewById(R.id.progressBar3);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu_explorer) {
+                return true;
+            } else if (itemId == R.id.menu_favourite) {
+                return true;
+            } else if (itemId == R.id.menu_profile) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                return true;
+            }
+            return false;
+        });
 
     }
 

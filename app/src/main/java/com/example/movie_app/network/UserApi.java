@@ -11,6 +11,7 @@ public interface UserApi {
     @POST("api/users/register")
     Call<ResponseBody> registerUser(@Body User user);
 
-    @POST("api/users/login")
-    Call<ResponseBody> loginUser(@Body User user);
+    @POST("/api/users/login")
+    Call<User> loginUser(@Body User user);
+
 }

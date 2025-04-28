@@ -49,50 +49,41 @@ public class LoginActivity extends AppCompatActivity {
         String username = userEdt.getText().toString().trim();
         String password = passEdt.getText().toString().trim();
 
-        // Validation
+
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
         UserApi userApi = RetrofitClient.getClient().create(UserApi.class);
-        User user = new User(username, password, null); // email not needed here
+        User user = new User(username, password, null);
 
-        Call<ResponseBody> call = userApi.loginUser(user);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<User> call = userApi.loginUser(user);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String msg = response.body().string();
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User loggedUser = response.body();
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                        if (msg.toLowerCase().contains("success")) {
-                            SharedPreferences sharedPref = getSharedPreferences("MovieAppPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("username", username);
-                            editor.putString("email", "user@email.com"); // Replace with actual email if available
-                            editor.apply();
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    } else {
-                        String error = "";
-                        if (response.errorBody() != null) {
-                            error = response.errorBody().string();
-                        }
-                        Toast.makeText(LoginActivity.this, "Login failed: " + error, Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(LoginActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPref = getSharedPreferences("MovieAppPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("username", loggedUser.getUsername());
+                    editor.putString("email", loggedUser.getEmail());
+                    editor.apply();
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    String error = "Login failed";
+                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(LoginActivity.this, "API Error", Toast.LENGTH_SHORT).show();
             }
