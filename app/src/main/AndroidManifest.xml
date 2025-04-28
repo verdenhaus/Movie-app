@@ -21,6 +21,7 @@
             android:exported="false" />
         <activity
             android:name=".Activities.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustNothing"
             android:exported="false" />
         <activity
             android:name=".Activities.LoginActivity"
