@@ -7,14 +7,13 @@
     android:layout_margin="6dp">
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/pic"
         android:layout_width="140dp"
         android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/titleTxt"
@@ -29,7 +28,7 @@
         android:layout_marginBottom="8dp"
         android:lines="2"
         android:maxLines="2"
-        app:layout_constraintEnd_toEndOf="@+id/imageView7"
-        app:layout_constraintStart_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+        app:layout_constraintEnd_toEndOf="@+id/pic"
+        app:layout_constraintStart_toStartOf="@+id/pic"
+        app:layout_constraintTop_toBottomOf="@+id/pic" />
 </androidx.constraintlayout.widget.ConstraintLayout>
