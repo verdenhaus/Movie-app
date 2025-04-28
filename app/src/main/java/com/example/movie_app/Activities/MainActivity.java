@@ -23,13 +23,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.movie_app.Adapters.CategoryListAdapter;
 import com.example.movie_app.Adapters.FilmListAdapter;
 import com.example.movie_app.Adapters.SliderAdapters;
+import com.example.movie_app.Domian.GenresItem;
 import com.example.movie_app.Domian.ListFilm;
 import com.example.movie_app.Domian.SliderItems;
 import com.example.movie_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         banner();
         sendRequestBestMovies();
         sendRequestUpComing();
+        sendRequestCategory();
     }
 
     private void sendRequestBestMovies() {
@@ -85,6 +89,22 @@ public class MainActivity extends AppCompatActivity {
             Log.i("error", "onErrorResponse: "+ error.toString());
         });
         mRequestQueue.add(mStringRequest3);
+    }
+
+    private void sendRequestCategory() {
+        mRequestQueue = Volley.newRequestQueue(this);
+        loading2.setVisibility(View.VISIBLE);
+        mStringRequest2 = new StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/genres", response -> {
+            Gson gson = new Gson();
+            loading2.setVisibility(View.GONE);
+            ArrayList<GenresItem> catList = gson.fromJson(response, new TypeToken<ArrayList<GenresItem>>(){}.getType());
+            adapterCategory = new CategoryListAdapter(catList);
+            recyclerViewCategory.setAdapter(adapterCategory);
+        }, error -> {
+            loading2.setVisibility(View.GONE);
+            Log.i("error", "onErrorResponse: "+ error.toString());
+        });
+        mRequestQueue.add(mStringRequest2);
     }
 
 
