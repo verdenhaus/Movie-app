@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.menu_explorer) {
                 return true;
             } else if (itemId == R.id.menu_favourite) {
+                startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;
             } else if (itemId == R.id.menu_profile) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));

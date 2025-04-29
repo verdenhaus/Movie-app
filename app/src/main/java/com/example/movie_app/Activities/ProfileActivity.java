@@ -48,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                 return true;
             } else if (itemId == R.id.menu_favourite) {
+                startActivity(new Intent(ProfileActivity.this, FavoritesActivity.class));
                 return true;
             } else if (itemId == R.id.menu_profile) {
                 return true;
