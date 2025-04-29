@@ -9,7 +9,7 @@
     tools:context=".Activities.DetailActivity">
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,9 +27,19 @@
                 android:id="@+id/picDetail"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:background="@drawable/gradient_background"
+                app:layout_constraintBottom_toBottomOf="@id/picDetail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"
@@ -44,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/backImg"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/oval_btn_background"
@@ -116,6 +126,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/genreView"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -175,12 +187,14 @@
                 android:id="@+id/imagesRecycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movieActorInfo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <ProgressBar
         android:id="@+id/progressBarDetail"
