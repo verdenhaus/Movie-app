@@ -29,6 +29,7 @@ import com.example.movie_app.Adapters.SliderAdapters;
 import com.example.movie_app.Domian.GenresItem;
 import com.example.movie_app.Domian.ListFilm;
 import com.example.movie_app.Domian.SliderItems;
+import com.example.movie_app.network.*;
 import com.example.movie_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -36,6 +37,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private  RecyclerView.Adapter adapterBestMovies, AdapterUpComing, adapterCategory;
@@ -60,52 +65,85 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRequestBestMovies() {
-        mRequestQueue = Volley.newRequestQueue(this);
         loading1.setVisibility(View.VISIBLE);
-        mStringRequest = new StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/movies?page=1", response -> {
-            Gson gson = new Gson();
-            loading1.setVisibility(View.GONE);
-            ListFilm items = gson.fromJson(response, ListFilm.class);
-            adapterBestMovies = new FilmListAdapter(items);
-            recyclerViewBestMovies.setAdapter(adapterBestMovies);
-        }, error -> {
-            loading1.setVisibility(View.GONE);
-            Log.i("error", "onErrorResponse: "+ error.toString());
+
+        MovieApi movieApi = RetrofitClient.getClient().create(MovieApi.class);
+        Call<ListFilm> call = movieApi.getBestMovies();
+
+        call.enqueue(new Callback<ListFilm>() {
+            @Override
+            public void onResponse(Call<ListFilm> call, Response<ListFilm> response) {
+                loading1.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null) {
+                    adapterBestMovies = new FilmListAdapter(response.body());
+                    recyclerViewBestMovies.setAdapter(adapterBestMovies);
+                } else {
+                    Log.e("MovieApi", "Response error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListFilm> call, Throwable t) {
+                loading1.setVisibility(View.GONE);
+                Log.e("MovieApi", "Request failed", t);
+            }
         });
-        mRequestQueue.add(mStringRequest);
+
     }
 
     private void sendRequestUpComing() {
-        mRequestQueue = Volley.newRequestQueue(this);
         loading3.setVisibility(View.VISIBLE);
-        mStringRequest3 = new StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/movies?page=2", response -> {
-            Gson gson = new Gson();
-            loading3.setVisibility(View.GONE);
-            ListFilm items = gson.fromJson(response, ListFilm.class);
-            AdapterUpComing = new FilmListAdapter(items);
-            recyclerViewUpcoming.setAdapter(AdapterUpComing);
-        }, error -> {
-            loading3.setVisibility(View.GONE);
-            Log.i("error", "onErrorResponse: "+ error.toString());
+
+        MovieApi movieApi = RetrofitClient.getClient().create(MovieApi.class);
+        Call<ListFilm> call = movieApi.getUpcomingMovies();
+
+        call.enqueue(new Callback<ListFilm>() {
+            @Override
+            public void onResponse(Call<ListFilm> call, Response<ListFilm> response) {
+                loading3.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null) {
+                    AdapterUpComing = new FilmListAdapter(response.body());
+                    recyclerViewUpcoming.setAdapter(AdapterUpComing);
+                } else {
+                    Log.e("MovieApi", "Response error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListFilm> call, Throwable t) {
+                loading3.setVisibility(View.GONE);
+                Log.e("MovieApi", "Request failed", t);
+            }
         });
-        mRequestQueue.add(mStringRequest3);
     }
 
+
     private void sendRequestCategory() {
-        mRequestQueue = Volley.newRequestQueue(this);
         loading2.setVisibility(View.VISIBLE);
-        mStringRequest2 = new StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/genres", response -> {
-            Gson gson = new Gson();
-            loading2.setVisibility(View.GONE);
-            ArrayList<GenresItem> catList = gson.fromJson(response, new TypeToken<ArrayList<GenresItem>>(){}.getType());
-            adapterCategory = new CategoryListAdapter(catList);
-            recyclerViewCategory.setAdapter(adapterCategory);
-        }, error -> {
-            loading2.setVisibility(View.GONE);
-            Log.i("error", "onErrorResponse: "+ error.toString());
+
+        MovieApi movieApi = RetrofitClient.getClient().create(MovieApi.class);
+        Call<ArrayList<GenresItem>> call = movieApi.getGenres();
+
+        call.enqueue(new Callback<ArrayList<GenresItem>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GenresItem>> call, Response<ArrayList<GenresItem>> response) {
+                loading2.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null) {
+                    adapterCategory = new CategoryListAdapter(response.body());
+                    recyclerViewCategory.setAdapter(adapterCategory);
+                } else {
+                    Log.e("MovieApi", "Genre response error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GenresItem>> call, Throwable t) {
+                loading2.setVisibility(View.GONE);
+                Log.e("MovieApi", "Genre request failed", t);
+            }
         });
-        mRequestQueue.add(mStringRequest2);
     }
+
 
 
     private void banner() {

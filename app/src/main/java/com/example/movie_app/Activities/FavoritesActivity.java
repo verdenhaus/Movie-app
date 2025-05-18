@@ -1,9 +1,12 @@
 package com.example.movie_app.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +19,16 @@ import com.android.volley.toolbox.Volley;
 import com.example.movie_app.Adapters.FilmListAdapter;
 import com.example.movie_app.Domian.ListFilm;
 import com.example.movie_app.R;
+import com.example.movie_app.User;
+import com.example.movie_app.network.MovieApi;
+import com.example.movie_app.network.RetrofitClient;
+import com.example.movie_app.network.UserApi;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapterFavorites;
@@ -37,22 +48,58 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     private void sendRequestFavorites() {
-        mRequestQueue = Volley.newRequestQueue(this);
         loading.setVisibility(View.VISIBLE);
 
-        mStringRequest = new StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/movies?page=1",
-                response -> {
-                    loading.setVisibility(View.GONE);
-                    ListFilm items = new Gson().fromJson(response, ListFilm.class);
-                    adapterFavorites = new FilmListAdapter(items);
-                    recyclerViewFavorites.setAdapter(adapterFavorites);
-                },
-                error -> {
-                    loading.setVisibility(View.GONE);
-                });
+        SharedPreferences sharedPref = getSharedPreferences("MovieAppPrefs", MODE_PRIVATE);
+        String username = sharedPref.getString("username", null);
 
-        mRequestQueue.add(mStringRequest);
+        if (username == null) {
+            Toast.makeText(this, "Username not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            loading.setVisibility(View.GONE);
+            return;
+        }
+
+        UserApi userApi = RetrofitClient.getClient().create(UserApi.class);
+        userApi.getUserByUsername(username).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Long userId = response.body().getId();
+
+                    MovieApi movieApi = RetrofitClient.getClient().create(MovieApi.class);
+                    Call<ListFilm> callFavorites = movieApi.getFavoritesByUserId(userId);
+                    callFavorites.enqueue(new Callback<ListFilm>() {
+                        @Override
+                        public void onResponse(Call<ListFilm> call, Response<ListFilm> response) {
+                            loading.setVisibility(View.GONE);
+                            if (response.isSuccessful() && response.body() != null) {
+                                adapterFavorites = new FilmListAdapter(response.body());
+                                recyclerViewFavorites.setAdapter(adapterFavorites);
+                            } else {
+                                Log.e("MovieApi", "Favorites response error: " + response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ListFilm> call, Throwable t) {
+                            loading.setVisibility(View.GONE);
+                            Log.e("MovieApi", "Favorites request failed", t);
+                        }
+                    });
+                } else {
+                    loading.setVisibility(View.GONE);
+                    Toast.makeText(FavoritesActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                loading.setVisibility(View.GONE);
+                Toast.makeText(FavoritesActivity.this, "Failed to get user info", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     private void initView() {
         recyclerViewFavorites = findViewById(R.id.recyclerViewFavorites);
